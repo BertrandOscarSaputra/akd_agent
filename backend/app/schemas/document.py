@@ -4,6 +4,8 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field
 
+from app.schemas.issue import Issue
+
 
 class PageContent(BaseModel):
     """Extracted text from a single PDF page."""
@@ -53,6 +55,7 @@ class DocumentResponse(BaseModel):
     total_characters: int
     pages: list[PageContent]
     sections: list[Section]
+    issues: list['Issue'] = Field(default_factory=list)
     created_at: datetime
 
 

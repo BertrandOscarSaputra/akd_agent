@@ -9,17 +9,24 @@ from app.schemas.document import (
     DocumentResponse,
     UploadResponse,
 )
+from app.schemas.issue import ExtractionRequest, ExtractionResponse
 from app.services.document_store import DocumentStore
 from app.services.pdf_service import PDFService
 from app.services.section_service import SectionService
+from app.services.extraction_service import ExtractionService
+from app.services.ollama_service import OllamaService
+from app.core.config import get_settings
 
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
+_settings = get_settings()
 _pdf_service = PDFService()
 _section_service = SectionService()
 _document_store = DocumentStore()
+_ollama_service = OllamaService(_settings)
+_extraction_service = ExtractionService(_ollama_service)
 
 
 @router.post("/upload", response_model=UploadResponse)
@@ -71,3 +78,29 @@ async def get_document(document_id: str) -> DocumentResponse:
     if doc is None:
         raise HTTPException(status_code=404, detail="Document not found")
     return doc
+
+
+@router.post("/extract/{document_id}", response_model=ExtractionResponse)
+async def extract_issues(document_id: str, request: ExtractionRequest) -> ExtractionResponse:
+    """Extract issues from a document using AI."""
+    doc = _document_store.get(document_id)
+    if doc is None:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    if not doc.sections:
+        raise HTTPException(status_code=400, detail="Document has no sections to extract from")
+
+    issues, duration_ms = await _extraction_service.extract_from_sections(
+        doc.sections, model=request.model
+    )
+    
+    _document_store.update_issues(document_id, issues)
+
+    return ExtractionResponse(
+        document_id=document_id,
+        total_issues=len(issues),
+        issues=issues,
+        sections_processed=len(doc.sections),
+        extraction_duration_ms=duration_ms,
+    )
+

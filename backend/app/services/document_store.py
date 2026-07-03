@@ -69,6 +69,22 @@ class DocumentStore:
         """
         return self._documents.get(document_id)
 
+    def update_issues(self, document_id: str, issues: list['Issue']) -> DocumentResponse | None:
+        """Update a document with extracted issues.
+
+        Args:
+            document_id: The document's unique identifier.
+            issues: The list of extracted issues.
+
+        Returns:
+            The updated document if found, None otherwise.
+        """
+        doc = self.get(document_id)
+        if doc is not None:
+            doc.issues = issues
+            logger.info("Updated document %s with %d issues", document_id, len(issues))
+        return doc
+
     def list_all(self) -> list[DocumentSummary]:
         """Return summaries of all stored documents.
 

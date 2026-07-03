@@ -19,6 +19,7 @@ class Issue(BaseModel):
     source_pages: list[int] = Field(..., description="List of page numbers where this issue was found")
     akd: str | None = Field(default=None, description="The AKD assigned to this issue")
     akd_confidence: float = Field(default=0.0, description="Confidence of the AKD classification")
+    review_flags: list[str] = Field(default_factory=list, description="Quality review warnings")
 
 
 class ExtractionRequest(BaseModel):

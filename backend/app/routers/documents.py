@@ -3,6 +3,7 @@
 import logging
 
 from fastapi import APIRouter, HTTPException, UploadFile
+from fastapi.responses import StreamingResponse
 
 from app.schemas.document import (
     DocumentListResponse,
@@ -17,6 +18,8 @@ from app.services.extraction_service import ExtractionService
 from app.services.ollama_service import OllamaService
 from app.services.duplicate_service import DuplicateService
 from app.services.akd_service import AKDService
+from app.services.review_service import ReviewService
+from app.services.report_service import ReportService
 from app.core.config import get_settings
 
 
@@ -31,6 +34,8 @@ _ollama_service = OllamaService(_settings)
 _extraction_service = ExtractionService(_ollama_service)
 _duplicate_service = DuplicateService(_ollama_service)
 _akd_service = AKDService(_ollama_service)
+_review_service = ReviewService()
+_report_service = ReportService()
 
 
 @router.post("/upload", response_model=UploadResponse)
@@ -103,6 +108,8 @@ async def extract_issues(document_id: str, request: ExtractionRequest) -> Extrac
         
     if request.classify_akd and issues:
         await _akd_service.classify_issues(issues, model=request.model)
+        
+    _review_service.review_issues(issues)
     
     _document_store.update_issues(document_id, issues)
 
@@ -114,3 +121,47 @@ async def extract_issues(document_id: str, request: ExtractionRequest) -> Extrac
         extraction_duration_ms=duration_ms,
     )
 
+
+@router.get("/documents/{document_id}/export/json")
+async def export_document_json(document_id: str):
+    """Export the extracted issues as a JSON file."""
+    doc = _document_store.get(document_id)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+        
+    content = doc.model_dump_json(indent=2)
+    return StreamingResponse(
+        iter([content.encode("utf-8")]),
+        media_type="application/json",
+        headers={"Content-Disposition": f'attachment; filename="{doc.filename}.json"'}
+    )
+
+
+@router.get("/documents/{document_id}/export/excel")
+async def export_document_excel(document_id: str):
+    """Export the extracted issues as an Excel file."""
+    doc = _document_store.get(document_id)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+        
+    excel_bytes = _report_service.generate_excel(doc)
+    return StreamingResponse(
+        iter([excel_bytes]),
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f'attachment; filename="{doc.filename}.xlsx"'}
+    )
+
+
+@router.get("/documents/{document_id}/export/word")
+async def export_document_word(document_id: str):
+    """Export the extracted issues as a Word file."""
+    doc = _document_store.get(document_id)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+        
+    word_bytes = _report_service.generate_word(doc)
+    return StreamingResponse(
+        iter([word_bytes]),
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        headers={"Content-Disposition": f'attachment; filename="{doc.filename}.docx"'}
+    )

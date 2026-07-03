@@ -16,6 +16,7 @@ from app.services.section_service import SectionService
 from app.services.extraction_service import ExtractionService
 from app.services.ollama_service import OllamaService
 from app.services.duplicate_service import DuplicateService
+from app.services.akd_service import AKDService
 from app.core.config import get_settings
 
 
@@ -29,6 +30,7 @@ _document_store = DocumentStore()
 _ollama_service = OllamaService(_settings)
 _extraction_service = ExtractionService(_ollama_service)
 _duplicate_service = DuplicateService(_ollama_service)
+_akd_service = AKDService(_ollama_service)
 
 
 @router.post("/upload", response_model=UploadResponse)
@@ -98,6 +100,9 @@ async def extract_issues(document_id: str, request: ExtractionRequest) -> Extrac
     
     if request.deduplicate and issues:
         issues = await _duplicate_service.detect_and_merge(issues)
+        
+    if request.classify_akd and issues:
+        await _akd_service.classify_issues(issues, model=request.model)
     
     _document_store.update_issues(document_id, issues)
 

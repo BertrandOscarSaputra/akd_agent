@@ -17,6 +17,8 @@ class Issue(BaseModel):
         description="Confidence score of the extraction (0.0 to 1.0)"
     )
     source_pages: list[int] = Field(..., description="List of page numbers where this issue was found")
+    akd: str | None = Field(default=None, description="The AKD assigned to this issue")
+    akd_confidence: float = Field(default=0.0, description="Confidence of the AKD classification")
 
 
 class ExtractionRequest(BaseModel):
@@ -29,6 +31,10 @@ class ExtractionRequest(BaseModel):
     deduplicate: bool = Field(
         default=True,
         description="Whether to detect and merge duplicate issues.",
+    )
+    classify_akd: bool = Field(
+        default=True,
+        description="Whether to classify issues into AKDs.",
     )
 
 

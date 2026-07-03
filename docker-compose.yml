@@ -30,3 +30,19 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
+
+  watcher:
+    build:
+      context: ./backend
+    container_name: akd_watcher
+    command: python -m scripts.watcher
+    environment:
+      - API_URL=http://backend:8000
+      - PDF_DIR=/app/data/pdfs
+      - OUTPUT_DIR=/app/output
+    volumes:
+      - ./data/pdfs:/app/data/pdfs
+      - ./output:/app/output
+    depends_on:
+      - backend
+    restart: unless-stopped

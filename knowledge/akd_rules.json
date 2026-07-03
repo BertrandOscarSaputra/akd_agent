@@ -1,0 +1,414 @@
+{
+  "version": "1.0",
+  "description": "DPR RI AKD Classification Knowledge Base",
+  "classification_rules": {
+    "priority_order": [
+      "Ketua DPR",
+      "Korpolkam",
+      "Korekku",
+      "Korinbang",
+      "Korkesra",
+      "Komisi I",
+      "Komisi II",
+      "Komisi III",
+      "Komisi IV",
+      "Komisi V",
+      "Komisi VI",
+      "Komisi VII",
+      "Komisi VIII",
+      "Komisi IX",
+      "Komisi X",
+      "Komisi XI",
+      "Komisi XII",
+      "Komisi XIII",
+      "Bamus",
+      "Baleg",
+      "Banggar",
+      "BAKN",
+      "BKSAP",
+      "BURT",
+      "MKD",
+      "BAM",
+      "Pansus",
+      "Setjen DPR RI",
+      "Eksternal"
+    ]
+  },
+  "akd": {
+    "Ketua DPR": {
+      "description": "Leadership of the DPR, official statements, institutional leadership, parliamentary diplomacy, and decisions involving the Speaker or Deputy Speakers.",
+      "primary_scope": [
+        "Speaker of DPR",
+        "Deputy Speaker",
+        "Institutional leadership",
+        "Official parliamentary representation",
+        "Leadership meetings"
+      ],
+      "keywords": [
+        "ketua dpr",
+        "wakil ketua dpr",
+        "pimpinan dpr",
+        "pidato",
+        "kunjungan ketua"
+      ],
+      "entities": [],
+      "priority": 100
+    },
+
+    "Korpolkam": {
+      "description": "Political, legal, security, defense, intelligence, and human rights issues involving multiple AKDs.",
+      "primary_scope": [
+        "National politics",
+        "Security",
+        "Defense",
+        "Human Rights",
+        "Law"
+      ],
+      "keywords": [
+        "politik",
+        "pemilu",
+        "keamanan",
+        "ham",
+        "tni",
+        "polri",
+        "konflik",
+        "intelijen"
+      ],
+      "entities": [],
+      "priority": 95
+    },
+
+    "Korekku": {
+      "description": "Economic, financial, industrial, investment, trade, infrastructure and state-owned enterprise policy.",
+      "primary_scope": [
+        "Economy",
+        "Trade",
+        "Industry",
+        "Investment",
+        "Infrastructure",
+        "BUMN"
+      ],
+      "keywords": [
+        "ekonomi",
+        "industri",
+        "perdagangan",
+        "investasi",
+        "bumn",
+        "umkm"
+      ],
+      "entities": [],
+      "priority": 95
+    },
+
+    "Korinbang": {
+      "description": "Research, innovation, agriculture, forestry, fisheries, environment and natural resources.",
+      "primary_scope": [
+        "Research",
+        "Innovation",
+        "Technology",
+        "Forestry",
+        "Agriculture",
+        "Environment"
+      ],
+      "keywords": [
+        "riset",
+        "teknologi",
+        "pertanian",
+        "kehutanan",
+        "perikanan",
+        "lingkungan"
+      ],
+      "entities": ["BRIN"],
+      "priority": 95
+    },
+
+    "Korkesra": {
+      "description": "Education, religion, health, manpower, women, children and social welfare.",
+      "primary_scope": [
+        "Education",
+        "Health",
+        "Religion",
+        "Social Affairs",
+        "Employment"
+      ],
+      "keywords": [
+        "pendidikan",
+        "kesehatan",
+        "agama",
+        "kemiskinan",
+        "bpjs",
+        "ketenagakerjaan"
+      ],
+      "entities": [],
+      "priority": 95
+    },
+
+    "Komisi I": {
+      "description": "Defense, foreign affairs, communication, information and intelligence.",
+      "primary_scope": [
+        "Foreign Affairs",
+        "Defense",
+        "Military",
+        "Communication",
+        "Cyber Security"
+      ],
+      "keywords": [
+        "tni",
+        "pertahanan",
+        "kominfo",
+        "diplomat",
+        "kedutaan",
+        "intelijen"
+      ],
+      "entities": ["Kementerian Luar Negeri", "TNI", "Komdigi"],
+      "priority": 90
+    },
+
+    "Komisi II": {
+      "description": "Regional government, elections, bureaucracy, civil service, land administration.",
+      "primary_scope": [
+        "Regional Government",
+        "Election",
+        "Civil Service",
+        "Land Affairs"
+      ],
+      "keywords": ["pemda", "pilkada", "pemilu", "asn", "tanah", "bpn"],
+      "entities": ["Kementerian Dalam Negeri", "BPN", "KPU", "Bawaslu"],
+      "priority": 90
+    },
+
+    "Komisi III": {
+      "description": "Law enforcement, justice, police, prosecution, corruption eradication and courts.",
+      "primary_scope": [
+        "Police",
+        "Prosecutor",
+        "Judiciary",
+        "Corruption",
+        "Law Enforcement"
+      ],
+      "keywords": ["kpk", "kejaksaan", "polri", "hakim", "mahkamah", "korupsi"],
+      "entities": [
+        "KPK",
+        "Polri",
+        "Kejaksaan Agung",
+        "Mahkamah Agung",
+        "Mahkamah Konstitusi"
+      ],
+      "priority": 90
+    },
+
+    "Komisi IV": {
+      "description": "Agriculture, fisheries, food security and forestry.",
+      "primary_scope": ["Agriculture", "Forestry", "Food", "Fishery"],
+      "keywords": ["pertanian", "petani", "kehutanan", "perikanan", "pangan"],
+      "entities": ["Kementerian Pertanian", "Perhutani"],
+      "priority": 90
+    },
+
+    "Komisi V": {
+      "description": "Transportation, public works, housing, villages and disaster management.",
+      "primary_scope": [
+        "Transportation",
+        "Roads",
+        "Housing",
+        "Infrastructure",
+        "Villages"
+      ],
+      "keywords": [
+        "jalan",
+        "tol",
+        "bandara",
+        "pelabuhan",
+        "kereta",
+        "pupr",
+        "perumahan"
+      ],
+      "entities": ["Kementerian PUPR", "Kementerian Perhubungan", "BNPB"],
+      "priority": 90
+    },
+
+    "Komisi VI": {
+      "description": "Trade, investment, industry, cooperatives, SMEs and state-owned enterprises.",
+      "primary_scope": ["Trade", "Investment", "Industry", "BUMN", "SMEs"],
+      "keywords": ["bumn", "investasi", "perdagangan", "koperasi", "umkm"],
+      "entities": ["Kementerian BUMN", "Kementerian Perdagangan"],
+      "priority": 90
+    },
+
+    "Komisi VII": {
+      "description": "Energy, mineral resources, downstream industry, science and technology.",
+      "primary_scope": [
+        "Energy",
+        "Mining",
+        "Oil",
+        "Gas",
+        "Electricity",
+        "Technology"
+      ],
+      "keywords": ["esdm", "pln", "nikel", "batubara", "energi", "hilirisasi"],
+      "entities": ["Kementerian ESDM", "PLN", "Pertamina"],
+      "priority": 90
+    },
+
+    "Komisi VIII": {
+      "description": "Religion, pilgrimage, social affairs, women, children and disaster response.",
+      "primary_scope": [
+        "Religion",
+        "Hajj",
+        "Social Affairs",
+        "Women",
+        "Children"
+      ],
+      "keywords": ["agama", "haji", "umrah", "bansos", "kemensos"],
+      "entities": ["Kementerian Agama", "Kementerian Sosial"],
+      "priority": 90
+    },
+
+    "Komisi IX": {
+      "description": "Health, employment, manpower and population.",
+      "primary_scope": ["Health", "Hospitals", "Employment", "Labor"],
+      "keywords": ["bpjs", "dokter", "rumah sakit", "tenaga kerja", "phk"],
+      "entities": ["Kementerian Kesehatan", "BPJS"],
+      "priority": 90
+    },
+
+    "Komisi X": {
+      "description": "Education, culture, sports, youth and tourism.",
+      "primary_scope": ["Education", "Culture", "Sports", "Tourism"],
+      "keywords": ["universitas", "guru", "budaya", "pariwisata", "olahraga"],
+      "entities": ["Kemendikbud", "Kemenparekraf"],
+      "priority": 90
+    },
+
+    "Komisi XI": {
+      "description": "Finance, banking, taxation, customs, monetary policy and state budget.",
+      "primary_scope": ["Finance", "Banking", "Tax", "Budget", "Fiscal Policy"],
+      "keywords": ["apbn", "bi", "ojk", "pajak", "bea cukai", "sbn"],
+      "entities": ["Bank Indonesia", "OJK", "Kementerian Keuangan"],
+      "priority": 90
+    },
+
+    "Komisi XII": {
+      "description": "Environment, climate change, environmental protection and sustainability.",
+      "primary_scope": ["Environment", "Climate", "Pollution", "Waste"],
+      "keywords": ["lingkungan", "emisi", "limbah", "karbon"],
+      "entities": ["Kementerian Lingkungan Hidup"],
+      "priority": 90
+    },
+
+    "Komisi XIII": {
+      "description": "Human rights, immigration, correctional institutions and related legal administration.",
+      "primary_scope": [
+        "Human Rights",
+        "Immigration",
+        "Correctional Facilities"
+      ],
+      "keywords": ["ham", "imigrasi", "lapas", "pemasyarakatan"],
+      "entities": ["Kementerian Imigrasi dan Pemasyarakatan", "Komnas HAM"],
+      "priority": 90
+    },
+
+    "Bamus": {
+      "description": "Scheduling and parliamentary agenda.",
+      "primary_scope": ["Agenda", "Meeting Schedule"],
+      "keywords": ["bamus", "jadwal rapat", "agenda"],
+      "entities": [],
+      "priority": 85
+    },
+
+    "Baleg": {
+      "description": "Legislation, bill harmonization and legislative planning.",
+      "primary_scope": ["Bills", "Legislation", "Prolegnas"],
+      "keywords": ["ruu", "harmonisasi", "prolegnas", "legislasi"],
+      "entities": [],
+      "priority": 85
+    },
+
+    "Banggar": {
+      "description": "State budget planning and budgeting.",
+      "primary_scope": ["Budget", "Fiscal Planning"],
+      "keywords": ["anggaran", "apbn", "defisit"],
+      "entities": [],
+      "priority": 85
+    },
+
+    "BAKN": {
+      "description": "Oversight of state financial accountability.",
+      "primary_scope": ["Audit", "Financial Accountability"],
+      "keywords": ["audit", "bpk", "laporan keuangan"],
+      "entities": ["BPK"],
+      "priority": 85
+    },
+
+    "BKSAP": {
+      "description": "Inter-parliamentary cooperation and parliamentary diplomacy.",
+      "primary_scope": ["International Parliamentary Cooperation"],
+      "keywords": ["ipu", "aipa", "delegasi"],
+      "entities": [],
+      "priority": 85
+    },
+
+    "BURT": {
+      "description": "Household affairs, facilities and welfare of DPR members.",
+      "primary_scope": ["Facilities", "Official Housing", "Benefits"],
+      "keywords": [
+        "tunjangan",
+        "rumah jabatan",
+        "kendaraan dinas",
+        "fasilitas"
+      ],
+      "entities": [],
+      "priority": 85
+    },
+
+    "MKD": {
+      "description": "Ethics, conduct and discipline of DPR members.",
+      "primary_scope": ["Ethics", "Disciplinary Cases"],
+      "keywords": [
+        "etik",
+        "mahkamah kehormatan",
+        "anggota dpr",
+        "pelanggaran etik"
+      ],
+      "entities": [],
+      "priority": 85
+    },
+
+    "BAM": {
+      "description": "Public aspirations and community engagement.",
+      "primary_scope": ["Public Aspirations", "Community Outreach"],
+      "keywords": ["aspirasi", "reses", "pengaduan masyarakat"],
+      "entities": [],
+      "priority": 80
+    },
+
+    "Pansus": {
+      "description": "Special Committee issues.",
+      "primary_scope": ["Special Committee"],
+      "keywords": ["pansus", "panitia khusus"],
+      "entities": [],
+      "priority": 80
+    },
+
+    "Setjen DPR RI": {
+      "description": "Administrative and operational affairs of the DPR Secretariat General.",
+      "primary_scope": [
+        "Administration",
+        "Personnel",
+        "Procurement",
+        "Internal Operations"
+      ],
+      "keywords": ["setjen", "pegawai", "pengadaan", "sekretariat"],
+      "entities": ["Sekretariat Jenderal DPR RI"],
+      "priority": 75
+    },
+
+    "Eksternal": {
+      "description": "Issues outside DPR jurisdiction.",
+      "primary_scope": ["Outside DPR authority"],
+      "keywords": [],
+      "entities": [],
+      "priority": 0
+    }
+  }
+}

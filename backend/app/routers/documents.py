@@ -10,7 +10,7 @@ from app.schemas.document import (
     DocumentResponse,
     UploadResponse,
 )
-from app.schemas.issue import ExtractionRequest, ExtractionResponse
+from app.schemas.issue import Issue, ExtractionRequest, ExtractionResponse
 from app.services.document_store import DocumentStore
 from app.services.pdf_service import PDFService
 from app.services.section_service import SectionService
@@ -120,6 +120,17 @@ async def extract_issues(document_id: str, request: ExtractionRequest) -> Extrac
         sections_processed=len(doc.sections),
         extraction_duration_ms=duration_ms,
     )
+
+
+@router.put("/documents/{document_id}/issues", response_model=DocumentResponse)
+async def update_document_issues(document_id: str, issues: list[Issue]) -> DocumentResponse:
+    """Update the issues list for a document (used for manual edits)."""
+    doc = _document_store.get(document_id)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+        
+    _document_store.update_issues(document_id, issues)
+    return doc
 
 
 @router.get("/documents/{document_id}/export/json")

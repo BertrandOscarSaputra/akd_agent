@@ -176,3 +176,40 @@ async def test_upload_with_sections(client: AsyncClient):
     assert data["sections_found"] >= 3
     section_names = data["section_names"]
     assert "Top Issue" in section_names
+
+
+@pytest.mark.anyio
+async def test_update_document_issues(client: AsyncClient):
+    pdf_bytes = _make_test_pdf(["Test"])
+    upload_resp = await client.post(
+        "/upload",
+        files={"file": ("test.pdf", io.BytesIO(pdf_bytes), "application/pdf")},
+    )
+    doc_id = upload_resp.json()["id"]
+
+    new_issues = [
+        {
+            "title": "Edited Issue",
+            "description": "Edited desc",
+            "date": "2026-07-03",
+            "sections": ["Top Issue"],
+            "source_pages": [1],
+            "akd": "Komisi I",
+            "confidence": 0.9,
+            "akd_confidence": 0.9,
+            "review_flags": []
+        }
+    ]
+    
+    response = await client.put(f"/documents/{doc_id}/issues", json=new_issues)
+    assert response.status_code == 200
+    
+    data = response.json()
+    assert len(data["issues"]) == 1
+    assert data["issues"][0]["title"] == "Edited Issue"
+
+
+@pytest.mark.anyio
+async def test_update_issues_not_found(client: AsyncClient):
+    response = await client.put("/documents/invalid-id/issues", json=[])
+    assert response.status_code == 404

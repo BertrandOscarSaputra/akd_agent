@@ -15,6 +15,7 @@ from app.services.pdf_service import PDFService
 from app.services.section_service import SectionService
 from app.services.extraction_service import ExtractionService
 from app.services.ollama_service import OllamaService
+from app.services.duplicate_service import DuplicateService
 from app.core.config import get_settings
 
 
@@ -27,6 +28,7 @@ _section_service = SectionService()
 _document_store = DocumentStore()
 _ollama_service = OllamaService(_settings)
 _extraction_service = ExtractionService(_ollama_service)
+_duplicate_service = DuplicateService(_ollama_service)
 
 
 @router.post("/upload", response_model=UploadResponse)
@@ -93,6 +95,9 @@ async def extract_issues(document_id: str, request: ExtractionRequest) -> Extrac
     issues, duration_ms = await _extraction_service.extract_from_sections(
         doc.sections, model=request.model
     )
+    
+    if request.deduplicate and issues:
+        issues = await _duplicate_service.detect_and_merge(issues)
     
     _document_store.update_issues(document_id, issues)
 

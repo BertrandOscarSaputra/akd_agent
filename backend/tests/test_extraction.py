@@ -55,6 +55,10 @@ async def test_extract_issues_from_document(client: AsyncClient, mock_sections: 
         "app.services.extraction_service.OllamaService.chat",
         new_callable=AsyncMock,
         return_value=mock_ollama_response,
+    ), patch(
+        "app.services.duplicate_service.OllamaService.generate_embeddings",
+        new_callable=AsyncMock,
+        return_value=[0.1, 0.2, 0.3],
     ):
         response = await client.post(
             f"/extract/{doc.id}",
@@ -69,9 +73,9 @@ async def test_extract_issues_from_document(client: AsyncClient, mock_sections: 
     
     issue = data["issues"][0]
     assert issue["title"] == "Korupsi"
-    assert issue["section"] == "Top Issue"
+    assert "Top Issue" in issue["sections"]
     assert issue["confidence"] == 0.9
-    assert issue["source_page_start"] == 1
+    assert 1 in issue["source_pages"]
 
 
 @pytest.mark.anyio

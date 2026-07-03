@@ -100,14 +100,16 @@ class ExtractionService:
                 
                 issues = []
                 for item in parsed_data:
+                    # Collect all pages this section spans
+                    pages = list(range(section.page_start, section.page_end + 1))
+                    
                     issues.append(Issue(
                         title=item.get("title", "Untitled Issue"),
                         description=item.get("description", ""),
                         date=item.get("date"),
                         confidence=item.get("confidence", 1.0),
-                        section=section.name,
-                        source_page_start=section.page_start,
-                        source_page_end=section.page_end,
+                        sections=[section.name],
+                        source_pages=pages,
                     ))
                 
                 logger.info("Extracted %d issues from section: %s", len(issues), section.name)

@@ -95,3 +95,34 @@ class OllamaService:
         except Exception as exc:
             logger.error("Ollama connection error during chat: %s", exc)
             raise
+
+    async def generate_embeddings(
+        self,
+        text: str,
+        model: str | None = None,
+    ) -> list[float]:
+        """Generate embeddings for a piece of text.
+
+        Args:
+            text: The text to embed.
+            model: Model name override. Uses default embedding model if None.
+
+        Returns:
+            List of floats representing the embedding vector.
+        """
+        from app.core.config import get_settings
+        # Get settings here to avoid circular import if config needs something
+        target_model = model or get_settings().ollama_embedding_model
+        
+        try:
+            response = self._client.embeddings(
+                model=target_model,
+                prompt=text,
+            )
+            return response.embedding
+        except ResponseError as exc:
+            logger.error("Ollama embeddings failed for model %s: %s", target_model, exc)
+            raise
+        except Exception as exc:
+            logger.error("Ollama connection error during embeddings: %s", exc)
+            raise

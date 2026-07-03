@@ -11,7 +11,7 @@ from fastapi import FastAPI
 
 from app.core.config import get_settings
 from app.core.logging import setup_logging
-from app.routers import health
+from app.routers import documents, health
 
 
 settings = get_settings()
@@ -41,3 +41,4 @@ app = FastAPI(
 )
 
 app.include_router(health.router, tags=["System"])
+app.include_router(documents.router, tags=["Documents"])

@@ -177,11 +177,14 @@ class ExtractionService:
                     issue_section = item.get("section")
                     matched_sections = [issue_section] if issue_section in all_section_names else all_section_names
                     
+                    raw_conf = item.get("confidence")
+                    conf = float(raw_conf) if raw_conf is not None else 1.0
+                    
                     issues.append(Issue(
                         title=item.get("title", "Untitled Issue"),
                         description=item.get("description", ""),
                         date=item.get("date"),
-                        confidence=item.get("confidence", 1.0),
+                        confidence=conf,
                         sections=matched_sections,
                         source_pages=sorted(list(all_pages)),
                     ))

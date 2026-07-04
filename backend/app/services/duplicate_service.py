@@ -54,8 +54,8 @@ class DuplicateService:
         Returns:
             List of merged, unique issues.
         """
-        if not issues:
-            return []
+        if len(issues) <= 1:
+            return issues
 
         logger.info("Starting duplicate detection for %d issues", len(issues))
 
@@ -168,3 +168,30 @@ class DuplicateService:
             confidence=max_confidence,
             source_pages=sorted(list(pages_set)),
         )
+
+    def _fast_title_dedup(self, issues: list[Issue]) -> list[Issue]:
+        """Quick dedup for small lists using normalized title comparison.
+
+        Avoids the cost of embedding generation when there are only a few
+        issues.
+        """
+        groups: dict[str, list[Issue]] = {}
+        for issue in issues:
+            key = issue.title.lower().strip()
+            if key not in groups:
+                groups[key] = []
+            groups[key].append(issue)
+
+        merged = []
+        for group in groups.values():
+            if len(group) == 1:
+                merged.append(group[0])
+            else:
+                merged.append(self._merge_issues(group))
+
+        if len(merged) < len(issues):
+            logger.info(
+                "Fast title dedup reduced %d issues to %d",
+                len(issues), len(merged),
+            )
+        return merged

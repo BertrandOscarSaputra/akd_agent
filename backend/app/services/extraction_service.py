@@ -13,7 +13,8 @@ logger = logging.getLogger(__name__)
 
 # Maximum characters to send per LLM call. Sections larger than this
 # are split, and smaller consecutive sections are batched together.
-_MAX_CHARS_PER_CALL = 4000
+# Kept conservative for 2GB GPU with 2048 context window.
+_MAX_CHARS_PER_CALL = 3000
 
 
 class ExtractionService:

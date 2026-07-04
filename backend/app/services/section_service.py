@@ -91,11 +91,55 @@ class SectionService:
                 page_end=max(page_nums),
             ))
 
+        # Merge sections with the same name to avoid redundant LLM calls.
+        # E.g. three consecutive "Alert Issue" headings become one section.
+        sections = self._merge_same_name_sections(sections)
+
         logger.info(
             "Sections detected: %s",
             [s.name for s in sections],
         )
         return sections
+
+    def _merge_same_name_sections(self, sections: list[Section]) -> list[Section]:
+        """Merge sections that share the same name into a single section.
+
+        Combines their content and expands the page range.
+        """
+        if not sections:
+            return sections
+
+        merged: list[Section] = []
+        groups: dict[str, list[Section]] = {}
+        # Preserve order by tracking first occurrence
+        order: list[str] = []
+
+        for section in sections:
+            if section.name not in groups:
+                groups[section.name] = []
+                order.append(section.name)
+            groups[section.name].append(section)
+
+        for name in order:
+            group = groups[name]
+            if len(group) == 1:
+                merged.append(group[0])
+            else:
+                combined_content = "\n\n".join(s.content for s in group if s.content)
+                page_start = min(s.page_start for s in group)
+                page_end = max(s.page_end for s in group)
+                merged.append(Section(
+                    name=name,
+                    content=combined_content,
+                    page_start=page_start,
+                    page_end=page_end,
+                ))
+                logger.info(
+                    "Merged %d '%s' sections into one (pages %d-%d)",
+                    len(group), name, page_start, page_end,
+                )
+
+        return merged
 
     def _match_heading(self, line: str) -> str | None:
         """Check if a line matches a known section heading.

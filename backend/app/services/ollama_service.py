@@ -83,7 +83,7 @@ class OllamaService:
                 options={
                     "num_ctx": 2048,      # Smaller context = faster on 2GB GPU
                     "temperature": 0.1,   # Low temp = more deterministic, faster
-                    "num_predict": 1024,   # Cap output length
+                    "num_predict": 2048,   # Cap output length
                 },
                 keep_alive="5m",
             )
